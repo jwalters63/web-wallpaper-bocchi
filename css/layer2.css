@@ -1,0 +1,42 @@
+.clouds-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 62.5vw;
+    height: 60vh;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.cloud-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150%;
+    height: 100%;
+
+    background-repeat: repeat-x;
+    background-size: 300% 150%;
+
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+#cloud-far {
+    z-index: 2;
+    animation: clouds-parallax 1250s linear infinite reverse;
+}
+
+#cloud-back {
+    z-index: 3;
+    animation: clouds-parallax 750s linear infinite reverse;
+}
+
+@keyframes clouds-parallax {
+    from { transform: translate3d(-50%, 0, 0); }
+    to { transform: translate3d(0, 0, 0); }
+}

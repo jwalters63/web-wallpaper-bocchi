@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atmosphere Engine - Optimized</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="sky-layer" class="full-screen"></div>
+
+<div id="stars-viewport">
+    <div id="stars-content"></div>
+</div>
+
+<div id="cloud-stage">
+    <div id="cloud-plane"></div>
+</div>
+
+<div id="debug-panel">
+    <div class="debug-header">
+        <span>SISTEMA ATMOSFÉRICO</span>
+        <div id="color-preview"></div>
+    </div>
+
+    <div class="debug-info">
+        <div class="info-row">
+            <span class="label">MODO:</span>
+            <span id="mode-indicator" class="value">TIEMPO REAL</span>
+        </div>
+        <div class="info-row">
+            <span class="label">RELOJ:</span>
+            <span id="debug-time" class="value mono">00:00:00</span>
+        </div>
+        <div class="info-row">
+            <span class="label">ESTADO:</span>
+            <span id="debug-status" class="value">Iniciando...</span>
+        </div>
+    </div>
+
+    <hr class="separator">
+
+    <div class="debug-controls">
+        <button id="btn-mode-toggle" class="control-btn">
+            ACTIVAR SIMULACIÓN
+        </button>
+
+        <div id="sim-controls" class="disabled">
+            <div class="control-row">
+                <button id="btn-play-pause" class="icon-btn">⏸</button>
+                <span id="sim-status-text">EJECUTANDO</span>
+            </div>
+
+            <div class="control-row" style="margin-top: 5px;">
+                <label for="sim-time-input" class="label">Saltar a:</label>
+                <input type="time" id="sim-time-input" value="12:00">
+            </div>
+
+            <div class="slider-container" style="margin-top: 10px;">
+                <label for="speed-slider">Velocidad: <span id="speed-label">x1</span></label>
+                <input type="range" id="speed-slider" min="1" max="100" step="1" value="1">
+            </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="logic.js"></script>
+</body>
+</html>

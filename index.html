@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atmosphere Engine - Modular v4.0</title>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/layer0.css">
+    <link rel="stylesheet" href="css/layer1.css">
+    <link rel="stylesheet" href="css/layer2.css">
+    <link rel="stylesheet" href="css/layer3.css">
+    <link rel="stylesheet" href="css/debug.css">
+</head>
+<body>
+
+<div id="sky-layer" class="full-screen"></div>
+
+<div id="stars-viewport">
+    <canvas id="stars-canvas"></canvas>
+</div>
+
+<div id="cloud-stage">
+    <div id="cloud-plane"></div>
+</div>
+
+<div class="clouds-container">
+    <div id="cloud-far" class="cloud-layer"></div>
+    <div id="cloud-back" class="cloud-layer"></div>
+</div>
+
+<div id="character-anchor">
+    <img id="character-sprite" src="assets/bocchi.png" alt="Bocchi">
+</div>
+
+<div id="debug-panel">
+    <div class="debug-header">
+        ATMOSPHERE CORE
+        <div id="color-preview"></div>
+    </div>
+
+    <div class="debug-info">
+        <div class="info-row">
+            <span class="label">MODO:</span>
+            <span id="mode-indicator" class="value">REAL</span>
+        </div>
+        <div class="info-row">
+            <span class="label">RELOJ:</span>
+            <span id="debug-time" class="value mono">00:00:00</span>
+        </div>
+    </div>
+
+    <div class="debug-controls">
+        <button id="btn-mode-toggle" class="control-btn">ACTIVAR SIMULACIÓN</button>
+
+        <div id="sim-controls" class="disabled">
+            <div class="control-row">
+                <button id="btn-play-pause" class="icon-btn">⏸</button>
+                <span>ESTADO: <span id="sim-status-text">RUN</span></span>
+            </div>
+            <div class="control-row">
+                <label for="sim-time-input">Saltar a:</label>
+                <input type="time" id="sim-time-input">
+            </div>
+            <div class="slider-container">
+                <label for="speed-slider">Velocidad: <span id="speed-label">x1</span></label>
+                <input type="range" id="speed-slider" min="1" max="100" value="1">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/core.js"></script>
+<script src="js/layer0.js"></script>
+<script src="js/layer1.js"></script>
+<script src="js/layer2.js"></script>
+<script src="js/layer3.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

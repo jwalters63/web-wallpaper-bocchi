@@ -1,0 +1,22 @@
+#character-anchor {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 4 !important;
+    height: 100vh !important;
+    width: auto !important;
+    pointer-events: none !important;
+
+    isolation: isolate !important;
+    background: none !important;
+}
+
+#character-sprite {
+    height: 100% !important;
+    width: auto !important;
+    display: block !important;
+
+    mix-blend-mode: normal !important;
+
+    image-rendering: -webkit-optimize-contrast !important;
+}

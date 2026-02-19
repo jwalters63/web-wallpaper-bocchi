@@ -1,0 +1,196 @@
+/* --- RESET GLOBAL --- */
+body, html {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background-color: #000;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.full-screen {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+}
+
+/* --- CAPA 0: CIELO --- */
+#sky-layer {
+    z-index: 0;
+    transition: background-color 0.5s linear;
+}
+
+/* --- CAPA 1: ESTRELLAS (Derecha, 75%) --- */
+#stars-viewport {
+    z-index: 1;
+    position: absolute;
+    top: 0; right: 0;
+    width: 75vw; height: 60vh;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0; /* Controlado por JS */
+    transition: opacity 2s ease-in-out;
+}
+
+#stars-content {
+    display: flex;
+    width: fit-content;
+    /* Velocidad muy lenta para las estrellas */
+    animation: star-drift 800s linear infinite;
+}
+
+#stars-content span {
+    display: inline-block;
+    white-space: pre;
+    font-size: 13px;
+    line-height: 1.1;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0; padding: 0;
+}
+
+@keyframes star-drift {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* --- CAPA 2: NUBES 3D (OPTIMIZADAS) --- */
+#cloud-stage {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
+
+    /* LA MAGIA 3D: Define la profundidad de campo */
+    perspective: 1000px;
+}
+
+#cloud-plane {
+    position: absolute;
+    /* Hacemos el plano gigante para cubrir el horizonte al rotar */
+    width: 300vw;
+    height: 300vh;
+    left: -100vw; /* Centramos horizontalmente */
+    top: -100vh;  /* Subimos el plano para que sea un "techo" */
+
+    /* INCLINACIÓN */
+    transform-style: preserve-3d;
+    transform: rotateX(70deg) translateY(-100px); /* Inclinado hacia el fondo */
+
+    /* La textura se genera en JS */
+    background-repeat: repeat;
+
+    /* MODO DE FUSIÓN: Para que tomen el color del cielo */
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity 3s ease-in-out;
+
+    /* DESVANECIMIENTO EN EL HORIZONTE (Máscara) */
+    mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 90%);
+
+    /* MOVIMIENTO: Movemos la textura, no el div (Barato para CPU) */
+    animation: cloud-fly 120s linear infinite;
+}
+
+@keyframes cloud-fly {
+    from { background-position: 0 0; }
+    to { background-position: 0 1000px; } /* Mueve las nubes hacia "nosotros" */
+}
+
+/* --- DEBUG UI v2.0 --- */
+#debug-panel {
+    position: fixed;
+    bottom: 20px; left: 20px;
+    width: 280px;
+    z-index: 1000;
+    padding: 15px;
+    background: rgba(10, 10, 12, 0.9); /* Fondo más oscuro y sólido */
+    color: #e0e0e0;
+    border: 1px solid #444;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.debug-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px; font-weight: bold; color: #fff;
+}
+
+#color-preview {
+    width: 15px; height: 15px; border-radius: 50%;
+    border: 1px solid #fff; box-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+.info-row {
+    display: flex; justify-content: space-between; margin-bottom: 4px;
+}
+.label { color: #888; }
+.value.mono { color: #00ff9d; font-size: 13px; }
+
+.separator { border: 0; border-top: 1px solid #333; margin: 10px 0; }
+
+.control-btn {
+    width: 100%; padding: 8px;
+    background: #2a2a2a; border: 1px solid #444; color: #fff;
+    cursor: pointer; border-radius: 4px; font-family: inherit;
+    transition: all 0.2s;
+}
+.control-btn:hover { background: #3a3a3a; }
+.control-btn.active { background: #0055aa; border-color: #0088ff; }
+
+/* Contenedor de Simulación */
+#sim-controls {
+    margin-top: 10px; opacity: 1; transition: opacity 0.3s;
+}
+/* Estado Deshabilitado */
+#sim-controls.disabled {
+    opacity: 0.3; pointer-events: none; /* No se puede clicar */
+}
+
+.control-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+
+.icon-btn {
+    background: none; border: 1px solid #555; color: #fff;
+    width: 25px; height: 25px; border-radius: 4px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.icon-btn:hover { background: #333; }
+
+.slider-container { display: flex; flex-direction: column; gap: 5px; }
+input[type=range] { width: 100%; cursor: pointer; }
+
+/* Añade esto al final de tu sección DEBUG UI */
+
+input[type="time"] {
+    background: #222;
+    color: #00ff9d; /* Verde Matrix para el texto */
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+    width: 100px; /* Ancho fijo para alineación */
+}
+
+input[type="time"]:focus {
+    border-color: #00ff9d;
+    box-shadow: 0 0 5px rgba(0, 255, 157, 0.2);
+}
+
+/* Icono del reloj interno (Webkit/Chrome) */
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Invierte el color del icono a blanco */
+    cursor: pointer;
+    opacity: 0.6;
+}
+input[type="time"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}

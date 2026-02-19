@@ -1,0 +1,89 @@
+#debug-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 280px;
+    z-index: 9999;
+
+    padding: 15px;
+    background: rgba(10, 10, 12, 0.95);
+    color: #e0e0e0;
+
+    border: 1px solid #444;
+    border-radius: 8px;
+    font-size: 11px;
+
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.debug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #fff;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+}
+
+#color-preview {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    box-shadow: 0 0 5px rgba(255,255,255,0.5);
+}
+
+.info-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.label { color: #888; }
+.value.mono { color: #00ff9d; font-size: 13px; font-weight: bold; }
+
+.control-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+.control-btn:hover { background: #3a3a3a; }
+.control-btn.active { background: #0055aa; border-color: #0088ff; }
+
+#sim-controls { margin-top: 15px; transition: opacity 0.3s; }
+#sim-controls.disabled { opacity: 0.3; pointer-events: none; filter: grayscale(100%); }
+
+.control-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+
+.icon-btn {
+    background: none;
+    border: 1px solid #555;
+    color: #fff;
+    width: 30px; height: 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.icon-btn:hover { border-color: #fff; background: #333; }
+
+.slider-container { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;}
+input[type=range] { width: 100%; cursor: pointer; }
+
+input[type="time"] {
+    background: #222;
+    color: #00ff9d;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    cursor: pointer;
+}
+input[type="time"]:focus { border-color: #00ff9d; box-shadow: 0 0 5px rgba(0, 255, 157, 0.2); }
+input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; opacity: 0.6; }
