@@ -15,8 +15,29 @@
     height: 100% !important;
     width: auto !important;
     display: block !important;
-
     mix-blend-mode: normal !important;
-
     image-rendering: -webkit-optimize-contrast !important;
+
+    will-change: filter;
+    transition: filter 2s ease-in-out;
+}
+
+/* EL ENTORNO URBANO */
+#city-anchor {
+    position: absolute !important;
+    bottom: -25px !important;   /* Eje Y: 1080 */
+    right: -50px !important;    /* Eje X: 1920 */
+    z-index: 3 !important;  /* Detrás del personaje, frente al cielo */
+    pointer-events: none !important;
+}
+
+#city-sprite {
+    display: block !important;
+    /* Evita que se deforme, asumiendo que es un PNG a escala */
+    width: 75vh !important;
+    height: auto !important;
+
+    /* Preparamos la GPU para aplicar la misma luz que Bocchi */
+    will-change: filter;
+    transition: filter 4s ease-in-out !important;
 }

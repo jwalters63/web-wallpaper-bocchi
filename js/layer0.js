@@ -1,12 +1,14 @@
 const Layer0 = {
     config: {
         targets: {
-            5: "#addbdb",
-            10: "#e1d0bb",
-            14: "#d4a373",
-            18: "#2f2c35"
+            5: "#addbdb",  // Amanecer
+            10: "#e1d0bb", // Día
+            14: "#d4a373", // Tarde (Beige)
+            17: "#73506c", // 🔥 NUEVO: El pico del crepúsculo (Naranja/Coral intenso)
+            18: "#2f2c35"  // Noche
         },
-        prevMap: { 5: 18, 10: 5, 14: 10, 18: 14 }
+        // Actualizamos el mapa para que el motor sepa enlazar las 17:00
+        prevMap: { 5: 18, 10: 5, 14: 10, 17: 14, 18: 17 }
     },
 
     init: () => {
@@ -19,7 +21,9 @@ const Layer0 = {
 
         let finalColor;
         let transitionFound = false;
-        const targets = [5, 10, 14, 18];
+
+        // Añadimos el nuevo objetivo de las 17:00 al array de cálculo
+        const targets = [5, 10, 14, 17, 18];
 
         for (let t of targets) {
             if (hour >= t - 1 && hour < t) {
@@ -40,6 +44,7 @@ const Layer0 = {
 
         if (!transitionFound) {
             if (hour >= 18 || hour < 4) finalColor = Layer0.config.targets[18];
+            else if (hour >= 17) finalColor = Layer0.config.targets[17]; // <-- Fallback de las 17:00
             else if (hour >= 14) finalColor = Layer0.config.targets[14];
             else if (hour >= 10) finalColor = Layer0.config.targets[10];
             else finalColor = Layer0.config.targets[5];

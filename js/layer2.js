@@ -3,28 +3,25 @@ const Layer2 = {
         dayOpacity: 0.7, nightOpacity: 0.2, transitionOpacity: 0.4,
         textureSize: { w: 1024, h: 512 },
 
-        mid: {
-            id: 'cloud-back',
-            threshold: 0.58,
-            scaleX: 2.2,
-            scaleY: 4.5,
-            seed: 0
-        },
+        mid: { id: 'cloud-back', threshold: 0.58, scaleX: 2.2, scaleY: 4.5, seed: 0 },
+        far: { id: 'cloud-far', threshold: 0.60, scaleX: 2.8, scaleY: 5.6, seed: 123.45 },
 
-        far: {
-            id: 'cloud-far',
-            threshold: 0.60,
-            scaleX: 2.8,
-            scaleY: 5.6,
-            seed: 123.45
+        // NUBE GIGANTE: Pared de niebla múltiple
+        giant: {
+            id: 'cloud-giant',
+            threshold: 0.45,
+            scaleX: 3.5,  // Más grumos horizontales (adiós a la colina única)
+            scaleY: 1.2,  // Picos más aplastados
+            seed: 888.88,
+            isFogBank: true
         }
     },
 
     init: () => {
-        console.log("[Layer 2] Generando sistema de nubes de gran escala...");
         Noise.seed(Math.random());
         Layer2.bake(Layer2.config.mid);
         Layer2.bake(Layer2.config.far);
+        Layer2.bake(Layer2.config.giant);
     },
 
     bake: (layer) => {
@@ -38,8 +35,10 @@ const Layer2 = {
         const TWO_PI = Math.PI * 2;
 
         for (let y = 0; y < h; y++) {
-            const ny = y / h;
-            const vWeight = ny > 0.55 ? Math.max(0, 1.0 - ((ny - 0.55) / 0.4)) : 1.0;
+            const ny = y / h; // ny va de 0 (Cima) a 1 (Base)
+
+            // Peso de desvanecimiento para las nubes antiguas
+            let vWeight = layer.isFogBank ? 1.0 : (ny > 0.55 ? Math.max(0, 1.0 - ((ny - 0.55) / 0.4)) : 1.0);
 
             for (let x = 0; x < w; x++) {
                 const angle = (x / w) * TWO_PI;
@@ -52,7 +51,17 @@ const Layer2 = {
                     tAmp += amp;
                     sX *= 2; sY *= 2; amp *= 0.5;
                 }
-                const val = (n / tAmp) * vWeight;
+
+                let val = (n / tAmp);
+
+                // MAGIA ALGEBRAICA PARA LA NIEBLA GIGANTE
+                if (layer.isFogBank) {
+                    // Cambiamos el 0.5 por 0.25 y multiplicamos más fuerte.
+                    // Esto jala la masa de la nube hacia arriba para que los edificios no la tapen.
+                    val = val + (ny - 0.25) * 3.0;
+                } else {
+                    val = val * vWeight;
+                }
 
                 let alpha = 0;
                 if (val > layer.threshold + 0.01) alpha = 255;
@@ -74,8 +83,11 @@ const Layer2 = {
 
         const mid = document.getElementById(Layer2.config.mid.id);
         const far = document.getElementById(Layer2.config.far.id);
+        const giant = document.getElementById('cloud-giant');
+
         if (mid) mid.style.opacity = op;
         if (far) far.style.opacity = op * 0.55;
+        if (giant) giant.style.opacity = op * 0.8;
     }
 };
 

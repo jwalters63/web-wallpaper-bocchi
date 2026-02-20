@@ -10,6 +10,7 @@ function gameLoop() {
     if (typeof Layer0 !== 'undefined') Layer0.update(AppState.currentHour);
     if (typeof Layer1 !== 'undefined') Layer1.update(AppState.currentHour);
     if (typeof Layer2 !== 'undefined') Layer2.update(AppState.currentHour);
+    if (typeof Layer3 !== 'undefined') Layer3.update(AppState.currentHour);
 
     updateDebugText();
 

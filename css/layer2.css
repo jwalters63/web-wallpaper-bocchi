@@ -3,7 +3,7 @@
     top: 0;
     right: 0;
     width: 62.5vw;
-    height: 60vh;
+    height: 100vh;
     pointer-events: none;
     overflow: hidden;
 }
@@ -28,12 +28,24 @@
 
 #cloud-far {
     z-index: 2;
+    height: 50vh;
     animation: clouds-parallax 1250s linear infinite reverse;
 }
 
 #cloud-back {
     z-index: 3;
+    height: 50vh;
     animation: clouds-parallax 750s linear infinite reverse;
+}
+
+#cloud-giant {
+    z-index: 1; /* Al fondo, detrás de las demás nubes */
+    top: auto;
+    bottom: 0; /* Anclada al piso */
+    height: 50vh; /* Ocupa la mitad inferior */
+
+    /* Deriva masiva y lejana (40 minutos por ciclo) */
+    animation: clouds-parallax 2400s linear infinite reverse;
 }
 
 @keyframes clouds-parallax {
