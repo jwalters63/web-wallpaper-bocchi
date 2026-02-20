@@ -22,20 +22,20 @@
     opacity: 0;
     transition: opacity 2s ease-in-out;
 
-    will-change: transform;
+    will-change: background-position;
     backface-visibility: hidden;
 }
 
 #cloud-far {
     z-index: 2;
     height: 50vh;
-    animation: clouds-parallax 1250s linear infinite reverse;
+    animation: clouds-parallax 5500s linear infinite reverse;
 }
 
 #cloud-back {
     z-index: 3;
     height: 50vh;
-    animation: clouds-parallax 750s linear infinite reverse;
+    animation: clouds-parallax 5000s linear infinite reverse;
 }
 
 #cloud-giant {
@@ -45,10 +45,10 @@
     height: 50vh; /* Ocupa la mitad inferior */
 
     /* Deriva masiva y lejana (40 minutos por ciclo) */
-    animation: clouds-parallax 2400s linear infinite reverse;
+    animation: clouds-parallax 10000s linear infinite reverse;
 }
 
 @keyframes clouds-parallax {
-    from { transform: translate3d(-50%, 0, 0); }
-    to { transform: translate3d(0, 0, 0); }
+    from { background-position: -281.25vw 0; }
+    to { background-position: 0 0; }
 }

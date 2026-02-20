@@ -6,12 +6,11 @@ const Layer2 = {
         mid: { id: 'cloud-back', threshold: 0.58, scaleX: 2.2, scaleY: 4.5, seed: 0 },
         far: { id: 'cloud-far', threshold: 0.60, scaleX: 2.8, scaleY: 5.6, seed: 123.45 },
 
-        // NUBE GIGANTE: Pared de niebla múltiple
         giant: {
             id: 'cloud-giant',
             threshold: 0.45,
-            scaleX: 3.5,  // Más grumos horizontales (adiós a la colina única)
-            scaleY: 1.2,  // Picos más aplastados
+            scaleX: 3.5,
+            scaleY: 1.2,
             seed: 888.88,
             isFogBank: true
         }
@@ -35,9 +34,8 @@ const Layer2 = {
         const TWO_PI = Math.PI * 2;
 
         for (let y = 0; y < h; y++) {
-            const ny = y / h; // ny va de 0 (Cima) a 1 (Base)
+            const ny = y / h;
 
-            // Peso de desvanecimiento para las nubes antiguas
             let vWeight = layer.isFogBank ? 1.0 : (ny > 0.55 ? Math.max(0, 1.0 - ((ny - 0.55) / 0.4)) : 1.0);
 
             for (let x = 0; x < w; x++) {
@@ -54,10 +52,7 @@ const Layer2 = {
 
                 let val = (n / tAmp);
 
-                // MAGIA ALGEBRAICA PARA LA NIEBLA GIGANTE
                 if (layer.isFogBank) {
-                    // Cambiamos el 0.5 por 0.25 y multiplicamos más fuerte.
-                    // Esto jala la masa de la nube hacia arriba para que los edificios no la tapen.
                     val = val + (ny - 0.25) * 3.0;
                 } else {
                     val = val * vWeight;
