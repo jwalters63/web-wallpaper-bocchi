@@ -101,7 +101,7 @@ window.onload = () => {
     requestAnimationFrame(gameLoop);
 };
 
-let debugEnabled = false;
+let debugEnabled = true;
 
 window.onload = () => {
     console.log("[System] Boot Sequence Initiated...");

@@ -48,6 +48,7 @@ const Layer3 = {
         let sepia = 0;
         let hue = 0;
         let contrast = 1.0;
+        let saturate = 1.0;
 
         if (hour >= 17.5 || hour < 4.5) {
             brightness = 0.55; // Bajamos la luz a la mitad
