@@ -1,20 +1,34 @@
 let lastTimestamp = Date.now();
 
+// Variables de control de Framerate (30 FPS)
+const fps = 30;
+const fpsInterval = 1000 / fps;
+let then = Date.now();
+
 function gameLoop() {
-    const now = Date.now();
-    const deltaTime = (now - lastTimestamp) / 1000;
-    lastTimestamp = now;
-
-    Core.updateTime(deltaTime);
-
-    if (typeof Layer0 !== 'undefined') Layer0.update(AppState.currentHour);
-    if (typeof Layer1 !== 'undefined') Layer1.update(AppState.currentHour);
-    if (typeof Layer2 !== 'undefined') Layer2.update(AppState.currentHour);
-    if (typeof Layer3 !== 'undefined') Layer3.update(AppState.currentHour);
-
-    updateDebugText();
-
+    // Pedimos el siguiente frame inmediatamente, pero no calculamos nada aún
     requestAnimationFrame(gameLoop);
+
+    const now = Date.now();
+    const elapsed = now - then;
+
+    // Solo ejecutamos la lógica si ha pasado el tiempo necesario (33.3ms)
+    if (elapsed > fpsInterval) {
+        // Ajustamos el tiempo para el siguiente frame, compensando pequeños retrasos
+        then = now - (elapsed % fpsInterval);
+
+        const deltaTime = (now - lastTimestamp) / 1000;
+        lastTimestamp = now;
+
+        Core.updateTime(deltaTime);
+
+        if (typeof Layer0 !== 'undefined') Layer0.update(AppState.currentHour);
+        if (typeof Layer1 !== 'undefined') Layer1.update(AppState.currentHour);
+        if (typeof Layer2 !== 'undefined') Layer2.update(AppState.currentHour);
+        if (typeof Layer3 !== 'undefined') Layer3.update(AppState.currentHour);
+
+        updateDebugText();
+    }
 }
 
 function updateDebugText() {
@@ -101,7 +115,7 @@ window.onload = () => {
     requestAnimationFrame(gameLoop);
 };
 
-let debugEnabled = true;
+let debugEnabled = false;
 
 window.onload = () => {
     console.log("[System] Boot Sequence Initiated...");
