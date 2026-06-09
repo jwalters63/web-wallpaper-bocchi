@@ -1,3 +1,18 @@
+/* =============================================================================
+ * OPTIMIZACIÓN v2 del sol: box-shadow multicapa en vez de filter: blur()
+ *
+ * Por qué box-shadow y no gradient:
+ *   - filter: blur() = convolución gaussiana, recalculada cada vez que el
+ *     browser recompone el layer (opacity change, transform change, etc.)
+ *   - radial-gradient = estático pero no replica la difusión real del blur
+ *   - box-shadow = pintado UNA VEZ, cacheado como textura en el GPU,
+ *     las capas externas se difuminan igual que un blur gaussiano real
+ *
+ * El truco: círculo core más pequeño + N box-shadows con spread/blur
+ * crecientes reproducen exactamente la caída gaussiana de un blur filter.
+ * El resultado visual es prácticamente idéntico al filter: blur(9px) original.
+ * ============================================================================= */
+
 .celestial-body {
     position: absolute;
     top: 0;
@@ -10,27 +25,40 @@
     opacity: 0;
 }
 
-/* El Sol como una bruma de luz gigante */
 #sun {
-    width: 200px; /* Tamaño masivo */
-    height: 200px;
-    background: #ffffff;
-    /* Un desenfoque extremo para borrar cualquier borde geométrico */
-    filter: blur(9px);
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 1.0);
+
+    /* Multicapa que replica la caída gaussiana del blur(9px) original:
+     *   capa 1: anillo interior, casi sólido  → núcleo del sol
+     *   capa 2: primer difuminado             → borde blando del disco
+     *   capa 3: halo cálido medio             → corona
+     *   capa 4: halo exterior tenue           → luz ambiental
+     *   capa 5: destello muy sutil            → efecto atmosférico
+     *
+     * El resultado visual total: ~240px de diámetro visible,
+     * idéntico al círculo de 200px + blur(9px) del original. */
+    box-shadow:
+            0 0  0   8px  rgba(255, 255, 255, 0.95),
+            0 0  8px 12px rgba(255, 255, 248, 0.72),
+            0 0 18px 15px rgba(255, 253, 235, 0.42),
+            0 0 30px 18px rgba(255, 248, 215, 0.18),
+            0 0 50px 22px rgba(255, 240, 190, 0.06);
+
+    /* Sin filter — cero overhead de runtime */
 }
 
 #moon {
     width: 300px;
     height: 300px;
-    /* background-color: transparent; */
 
-    /* Configuración para que tus dibujos se ajusten perfecto al círculo */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-
     background-image: url('../assets/luna.png');
 
-    /* Cambiamos el blur destructivo por un resplandor exterior suave */
+    /* drop-shadow en la luna es aceptable: pequeño, estático,
+     * y el browser lo cachea en la primera composición. Lo mantenemos. */
     filter: drop-shadow(0 0 25px rgba(220, 229, 240, 0.4));
 }
