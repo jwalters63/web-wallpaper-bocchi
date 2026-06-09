@@ -1,25 +1,3 @@
-/* =============================================================================
- * OPTIMIZACIONES:
- *
- * 1. will-change: background-position → will-change: transform
- *    "background-position" no es una propiedad que el compositor GPU pueda
- *    manejar de forma independiente. Solo "transform" y "opacity" son verdaderas
- *    propiedades del compositor. El cambio no afecta la animación CSS (que
- *    ya corre correctamente), pero sí da el hint correcto al browser.
- *
- * 2. isolation: isolate en .clouds-container
- *    El mix-blend-mode: overlay en las nubes hace que el browser tenga que
- *    renderizar en conjunto las nubes + TODO lo que está detrás de ellas.
- *    Con isolation: isolate en el contenedor padre, el blend mode solo opera
- *    DENTRO del contenedor de nubes, no contra el cielo completo.
- *    Efecto visual: mínimamente diferente. Ganancia de compositing: significativa.
- *
- * NOTA sobre mix-blend-mode: overlay
- *    Es el efecto más caro de todo el wallpaper. Si en algún momento quieres
- *    el máximo rendimiento posible, sustitúyelo por "opacity: X" y listo.
- *    Las nubes se verán blancas sólidas pero el GPU estará completamente libre.
- * ============================================================================= */
-
 .clouds-container {
     position: absolute;
     top: 0;
@@ -29,10 +7,6 @@
     pointer-events: none;
     overflow: hidden;
 
-    /* NUEVO: limita el alcance del mix-blend-mode a este contenedor.
-     * Sin esto, el blend mode opera contra TODO lo que está renderizado
-     * debajo (cielo, sol, luna, ciudad). Con isolation: isolate, el blend
-     * solo opera entre las capas de nubes entre sí — mucho menos trabajo. */
     isolation: isolate;
 }
 
@@ -50,9 +24,6 @@
     opacity: 0;
     transition: opacity 2s ease-in-out;
 
-    /* CAMBIO: background-position → transform
-     * El compositor GPU puede manejar "transform" de forma autónoma.
-     * "background-position" no puede. */
     will-change: transform;
     backface-visibility: hidden;
 }
@@ -77,11 +48,6 @@
     animation: clouds-parallax 10000s linear infinite reverse;
 }
 
-/* La animación anima background-position, no transform, por lo que el
- * will-change: transform no aplica directamente a esta keyframe.
- * Para migrar a transform puro necesitarías cambiar el HTML (añadir un
- * div interior). Lo dejamos así por ahora — la ganancia principal viene
- * de isolation: isolate en el contenedor. */
 @keyframes clouds-parallax {
     from { background-position: -281.25vw 0; }
     to   { background-position: 0 0; }
